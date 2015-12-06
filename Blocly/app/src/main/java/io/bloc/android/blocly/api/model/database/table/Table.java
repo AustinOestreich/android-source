@@ -26,7 +26,6 @@ public abstract class Table {
         if(columnIndex == -1){
             return "";
         }
-        cursor.moveToFirst();
         return cursor.getString(columnIndex);
     }
 

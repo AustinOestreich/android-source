@@ -160,7 +160,15 @@ public class RssItemTable extends Table {
     public static Cursor fetchItemsForFeed(SQLiteDatabase readonlyDatabase, long feedRowId){
         return readonlyDatabase.query(true, NAME, null, COLUMN_RSS_FEED + " = ?",
                 new String[]{String.valueOf(feedRowId)},
-               null, null, COLUMN_PUB_DATE + " DESC", null);
+                null, null, COLUMN_PUB_DATE + " DESC", null);
+    }
+
+    public static boolean hasItem(SQLiteDatabase readonlyDatabase, String guId){
+        Cursor query = readonlyDatabase.query(true, NAME, new String[]{COLUMN_GUID}, COLUMN_GUID + " = ?", new String[]{guId},
+                null, null, null, null);
+        boolean hasItem = query.moveToFirst();
+        query.close();
+        return hasItem;
     }
 
 }
