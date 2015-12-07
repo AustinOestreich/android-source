@@ -165,6 +165,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
             content.setText(rssItem.getDescription());
             expandedContent.setText(rssItem.getDescription());
 
+
             animateHeader(rssItem);
         }
 

@@ -65,5 +65,5 @@ public class RssItemListFragment extends Fragment implements ItemAdapter.DataSou
         itemAdapter.setDelegate(this);
     }
 
-    
+
 }

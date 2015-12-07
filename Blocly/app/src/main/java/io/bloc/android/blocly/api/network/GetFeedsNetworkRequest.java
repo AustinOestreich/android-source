@@ -33,6 +33,7 @@ public class GetFeedsNetworkRequest extends NetworkRequest<List<GetFeedsNetworkR
     private static final String XML_TAG_ENCLOSURE = "enclosure";
     private static final String XML_ATTRIBUTE_URL = "url";
     private static final String XML_ATTRIBUTE_TYPE = "type";
+    public static final String XML_TAG_YOUTUBE = "youtube tag";
     public static final int ERROR_PARSING = 3;
 
     String [] feedUrls;
@@ -70,6 +71,7 @@ public class GetFeedsNetworkRequest extends NetworkRequest<List<GetFeedsNetworkR
                     String itemPubDate = null;
                     String itemEnclosureURL = null;
                     String itemEnclosureMIMEType = null;
+                    String youtubeMedia = null;
 
                     Node itemNode = allItemNodes.item(itemIndex);
                     NodeList tagNodes = itemNode.getChildNodes();
@@ -105,8 +107,11 @@ public class GetFeedsNetworkRequest extends NetworkRequest<List<GetFeedsNetworkR
                         }
 
                         if (itemEnclosureURL == null) {
-                            itemEnclosureURL = itemMediaURL;
-                            itemEnclosureMIMEType = itemMediaMIMEType;
+                            if(youtubeMedia == null) {
+                                itemEnclosureURL = itemMediaURL;
+                                itemEnclosureMIMEType = itemMediaMIMEType;
+                            }else{itemEnclosureURL = youtubeMedia;
+                            }
                         }
                         if (itemContentEncodedText != null) {
                             itemDescription = itemContentEncodedText;
@@ -229,9 +234,14 @@ public class GetFeedsNetworkRequest extends NetworkRequest<List<GetFeedsNetworkR
     static String parseImageFromHTML(String htmlString){
         org.jsoup.nodes.Document document = Jsoup.parse(htmlString);
         Elements imgElements = document.select("img");
-        if(imgElements.isEmpty()){
+        Elements youtubeElement = document.select("img[href*=youtube]");
+        if(imgElements.isEmpty() || youtubeElement.isEmpty()){
             return null;
         }
-        return imgElements.attr("src");
+        if(youtubeElement.isEmpty()) {
+            return imgElements.attr("src");
+        }else{
+            return youtubeElement.attr("src");
+        }
     }
 }

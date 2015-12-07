@@ -297,4 +297,8 @@ public class DataSource {
             }
         });
     }
+
+    public void addNewItemsToFeed(final RssFeed rssFeed, final Callback<List<RssItem>> callback){
+        
+    }
 }
