@@ -171,8 +171,51 @@ public class DataSource {
         executorService.submit(task);
     }
 
-    void refreshFeed(final String feedURL, final Callback<RssFeed> callback){
+    void updateFeed(final String feedURL, final Callback<RssFeed> callback){
 
+        final Handler callbackThreadHandler = new Handler();
+        submitTask(new Runnable() {
+
+            @Override
+            public void run() {
+
+                Cursor existingFeedCursor = RssFeedTable.fetchFeedWithURL(databaseOpenHelper.getReadableDatabase(), feedURL);
+
+                if (!existingFeedCursor.moveToFirst()) {
+                    GetFeedsNetworkRequest getFeedsNetworkRequest = new GetFeedsNetworkRequest(feedURL);
+                    List<GetFeedsNetworkRequest.FeedResponse> feedResponses = getFeedsNetworkRequest.performRequest();
+
+                    if(checkForError(getFeedsNetworkRequest, callbackThreadHandler, callback)){
+                        return;
+                    }
+                    GetFeedsNetworkRequest.FeedResponse newFeedResponse = feedResponses.get(0);
+                    long newFeedId = new RssFeedTable.Builder()
+                            .setFeedURL(newFeedResponse.channelFeedURL)
+                            .setSiteURL(newFeedResponse.channelURL)
+                            .setTitle(newFeedResponse.channelTitle)
+                            .setDescription(newFeedResponse.channelDescription)
+                            .insert(databaseOpenHelper.getWritableDatabase());
+
+                    for (GetFeedsNetworkRequest.ItemResponse itemResponse : newFeedResponse.channelItems) {
+                        insertResponseToDatabase(newFeedId, itemResponse);
+
+                    }
+                    Cursor newFeedCursor = rssFeedTable.fetchRow(databaseOpenHelper.getReadableDatabase(), newFeedId);
+                    newFeedCursor.moveToFirst();
+                    final RssFeed fetchedFeed = feedFromCursor(newFeedCursor);
+                    newFeedCursor.close();
+                    callbackThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onSuccess(fetchedFeed);
+
+                        }
+                    });
+                }else{
+
+                }
+            }
+        });
     }
 
     boolean checkForError(GetFeedsNetworkRequest getFeedsNetworkRequest, Handler callbackThreadHandler, final Callback<?> callback){
@@ -218,36 +261,6 @@ public class DataSource {
                 .insert(databaseOpenHelper.getWritableDatabase());
     }
 
-    public void fetchNewItemsForFeed(final RssFeed rssFeed, final Callback<List<RssItem>> callback){
-        final Handler callbackThreadHandler = new Handler();
-        submitTask(new Runnable(){
-            @Override
-            public void run(){
-                GetFeedsNetworkRequest getFeedsNetworkRequest = new GetFeedsNetworkRequest(rssFeed.getFeedUrl());
-                final List<RssItem> newItems = new ArrayList<RssItem>();
-                if(checkForError(getFeedsNetworkRequest, callbackThreadHandler, callback)){
-                    return;
-                }
-                GetFeedsNetworkRequest.FeedResponse feedResponse = feedResponses.get(0);
-                for(GetFeedsNetworkRequest.ItemResponse itemResponse : feedResponse.channelItems){
-                    if(RssItemTable.hasItem(databaseOpenHelper.getReadableDatabase(),itemResponse.itemGUID)){
-                        continue;
-                    }
-                    long newItemRowId = insertResponseToDatabase(rssFeed.getRowId(), itemResponse);
-                    Cursor newItemCursor = rssItemTable.fetchRow(databaseOpenHelper.getReadableDatabase(), newItemRowId);
-                    newItemCursor.moveToFirst();
-                    newItems.add(itemFromCursor(newItemCursor));
-                    newItemCursor.close();
-                }
-                callbackThreadHandler.post(new Runnable(){
-                    @Override
-                    public void run(){
-                        callback.onSuccess(newItems);
-                    }
-                });
-            }
-        });
-    }
     public void fetchFeedWithId(final long rowId, final Callback<RssFeed> callback) {
         final Handler callbackThreadHandler = new Handler();
         submitTask(new Runnable() {
@@ -296,9 +309,5 @@ public class DataSource {
                 });
             }
         });
-    }
-
-    public void addNewItemsToFeed(final RssFeed rssFeed, final Callback<List<RssItem>> callback){
-        
     }
 }

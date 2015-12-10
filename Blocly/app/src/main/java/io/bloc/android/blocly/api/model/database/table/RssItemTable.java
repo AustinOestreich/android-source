@@ -28,7 +28,7 @@ public class RssItemTable extends Table {
             return this;
         }
 
-        public Builder setPubDate(long pubDate){
+        public Builder setPubDate(String pubDate){
             values.put(COLUMN_PUB_DATE, pubDate);
             return this;
         }
@@ -63,7 +63,7 @@ public class RssItemTable extends Table {
     private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_GUID = "guid";
-    public static final String COLUMN_PUB_DATE = "pub_date";
+    private static final String COLUMN_PUB_DATE = "pub_date";
     private static final String COLUMN_ENCLOSURE = "enclosure";
     private static final String COLUMN_MIME_TYPE = "mime_type";
     private static final String COLUMN_RSS_FEED = "rss_feed";
