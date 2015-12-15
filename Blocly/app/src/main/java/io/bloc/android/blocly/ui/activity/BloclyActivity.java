@@ -1,12 +1,12 @@
 package io.bloc.android.blocly.ui.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import io.bloc.android.blocly.R;
 import io.bloc.android.blocly.api.DataSource;
 import io.bloc.android.blocly.api.model.RssFeed;
 import io.bloc.android.blocly.api.model.RssItem;
-import io.bloc.android.blocly.ui.adapter.ItemAdapter;
 import io.bloc.android.blocly.ui.adapter.NavigationDrawerAdapter;
 import io.bloc.android.blocly.ui.fragment.RssItemListFragment;
 
@@ -61,7 +61,7 @@ public class BloclyActivity extends AppCompatActivity
         navigationDrawerAdapter.setDelegate(this);
         navigationDrawerAdapter.setDelegate(this);
 
-
+        RecyclerView navigationRecyclerView = (RecyclerView) findViewById(R.id.rv_nav_activity_blocly);
         navigationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navigationRecyclerView.setItemAnimator(new DefaultItemAnimator());
         navigationRecyclerView.setAdapter(navigationDrawerAdapter);
@@ -168,6 +168,25 @@ public class BloclyActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void animateShareItem(final boolean enabled) {
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        if (shareItem.isEnabled() == enabled) {
+            return;
+        }
+        shareItem.setEnabled(enabled);
+        final Drawable shareIcon = shareItem.getIcon();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(enabled ? new int[]{0, 255} : new int[]{255, 0});
+        valueAnimator.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                shareIcon.setAlpha((Integer) animation.getAnimatedValue());
+            }
+        });
+        valueAnimator.start();
     }
 
     @Override

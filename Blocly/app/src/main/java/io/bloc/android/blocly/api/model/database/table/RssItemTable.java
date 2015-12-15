@@ -28,7 +28,7 @@ public class RssItemTable extends Table {
             return this;
         }
 
-        public Builder setPubDate(String pubDate){
+        public Builder setPubDate(long pubDate){
             values.put(COLUMN_PUB_DATE, pubDate);
             return this;
         }

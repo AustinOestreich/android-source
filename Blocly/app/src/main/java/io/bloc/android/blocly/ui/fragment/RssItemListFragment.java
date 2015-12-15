@@ -100,8 +100,7 @@ public class RssItemListFragment extends Fragment implements ItemAdapter.DataSou
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // #7
-                BloclyApplication.getSharedDataSource().fetchNewItemsForFeed(currentFeed,
+                BloclyApplication.getSharedDataSource().fetchNewItemsForFeed(
                         new DataSource.Callback<List<RssItem>>() {
                             @Override
                             public void onSuccess(List<RssItem> rssItems) {
@@ -120,9 +119,11 @@ public class RssItemListFragment extends Fragment implements ItemAdapter.DataSou
                             public void onError(String errorMessage) {
                                 swipeRefreshLayout.setRefreshing(false);
                             }
-                        });
+                        }, "https://www.reddit.com/.rss");
             }
         });
+
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
