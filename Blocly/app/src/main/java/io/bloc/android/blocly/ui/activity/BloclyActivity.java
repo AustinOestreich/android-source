@@ -215,6 +215,11 @@ public class BloclyActivity extends AppCompatActivity
        animateShareItem(expandedItem != null);
    }
 
+    @Override
+    public void onItemContracted(RssItemListFragment rssItemListFragment, RssItem rssItem) {
+
+    }
+
 
     @Override
     public void onItemVisitClicked(RssItemListFragment rssItemListFragment, RssItem rssItem) {

@@ -11,12 +11,12 @@ public class RssItem extends Model{
     private String url;
     private String imageUrl;
     private long rssFeedId;
-    private long datePublished;
+    private String datePublished;
     private boolean read;
     private boolean favorite;
     private boolean archived;
 
-    public RssItem(long rowId, String guid, String title, String description, String url, String imageUrl, long datePublished, long rssFeedId, boolean read, boolean favorite, boolean archived) {
+    public RssItem(long rowId, String guid, String title, String description, String url, String imageUrl, String datePublished, long rssFeedId, boolean read, boolean favorite, boolean archived) {
         super(rowId);
         this.guid = guid;
         this.title = title;
@@ -56,7 +56,7 @@ public class RssItem extends Model{
         return rssFeedId;
     }
 
-    public long getDatePublished() {
+    public String getDatePublished() {
         return datePublished;
     }
 
