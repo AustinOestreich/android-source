@@ -25,6 +25,15 @@
             android:label="@string/title_activity_result"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".ui.ResultActivity"
+            android:label="@string/title_activity_result"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="bloc.dictionary.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

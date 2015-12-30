@@ -37,25 +37,10 @@
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_gravity="bottom"
         android:text="Search"
         android:padding="15dp"
-        android:clickable="true" />
-
-    <TextView
-        android:paddingTop="20dp"
-        android:textStyle="bold"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Parsed JSON : " />
-    <TextView
-        android:paddingTop="16dp"
-        android:id="@+id/jsonParsed"
-        android:layout_width="fill_parent"
-        android:layout_gravity="right"
-        android:layout_height="wrap_content"
-        />
+        android:clickable="true"
+        android:onClick="sendData"/>
 
 </android.support.design.widget.CoordinatorLayout>
