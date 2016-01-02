@@ -29,8 +29,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         void printText(View v, String s);
     }
 
-    public static interface NavigationDrawerAdapterDataSource{
-        public List<RssFeed> getFeeds(NavigationDrawerAdapter adapter);
+    public interface NavigationDrawerAdapterDataSource{
+        List<RssFeed> getFeeds(NavigationDrawerAdapter adapter);
     }
 
     WeakReference<NavigationDrawerAdapterDataSource> dataSource;
@@ -73,7 +73,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         if(dataSource == null) {
             return null;
         }
-            return dataSource.get();
+        return dataSource.get();
     }
 
     public void setDataSource(NavigationDrawerAdapterDataSource dataSource){
@@ -120,12 +120,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                     ? View.VISIBLE : View.GONE);
 
             if (position < NavigationOption.values().length) {
-                // #5
                 int[] titleTexts = new int[] {R.string.navigation_option_inbox,
                         R.string.navigation_option_favorites,
                         R.string.navigation_option_archived};
                 title.setText(titleTexts[position]);
-            } else {
+            }else{
                 title.setText(rssFeed.getTitle());
             }
         }
@@ -138,6 +137,9 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             if(position < NavigationOption.values().length){
                 getDelegate().didSelectNavigationOption(NavigationDrawerAdapter.this,
                         NavigationOption.values()[position]);
+            }
+            else{
+                getDelegate().didSelectFeed(NavigationDrawerAdapter.this, rssFeed);
             }
         }
 

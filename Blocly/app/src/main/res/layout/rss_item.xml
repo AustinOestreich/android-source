@@ -32,8 +32,7 @@
             android:id="@+id/tv_rss_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/fl_rss_item_image_header"
-            android:text="@string/placeholder_title" />
+            android:layout_below="@+id/fl_rss_item_image_header" />
 
         <CheckBox
             android:id="@+id/cb_rss_item_check_mark"
@@ -59,8 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_rss_item_title"
             android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/cb_rss_item_check_mark"
-            android:text="@string/placeholder_headline"/>
+            android:layout_toLeftOf="@+id/cb_rss_item_check_mark" />
 
         <io.bloc.android.blocly.ui.widget.RobotoTextView
             style="@style/Body1"
@@ -72,8 +70,7 @@
             android:layout_below="@id/tv_rss_item_feed_title"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/cb_rss_item_check_mark"
-            android:text="@string/placeholder_content" />
+            android:layout_toLeftOf="@+id/cb_rss_item_check_mark" />
 
 
     <LinearLayout

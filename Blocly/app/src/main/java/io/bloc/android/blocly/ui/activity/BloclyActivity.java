@@ -58,7 +58,7 @@ public class BloclyActivity extends AppCompatActivity
 
         navigationDrawerAdapter = new NavigationDrawerAdapter();
 
-        navigationDrawerAdapter.setDelegate(this);
+        navigationDrawerAdapter.setDataSource(this);
         navigationDrawerAdapter.setDelegate(this);
 
         RecyclerView navigationRecyclerView = (RecyclerView) findViewById(R.id.rv_nav_activity_blocly);

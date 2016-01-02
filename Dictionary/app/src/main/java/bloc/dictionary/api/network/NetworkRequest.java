@@ -11,40 +11,56 @@ import java.net.URL;
  * Created by Austin on 12/28/2015.
  */
 public class NetworkRequest{
-    public static final int ERROR_NO_WORD_FOUND = 1;
-    private int errorCode;
+    public String requestContent(String url) {
+        HttpClient httpclient = new DefaultHttpClient();
+        String result = null;
+        HttpGet httpget = new HttpGet(url);
+        HttpResponse response = null;
+        InputStream instream = null;
+        String errorMessage;
 
-    protected void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
-    }
+        try {
+            response = httpclient.execute(httpget);
+            HttpEntity entity = response.getEntity();
 
-    public int getErrorCode() {
-        return errorCode;
-    }
-
-    private class callAPI extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String urlString = params[0];
-
-            String resultToDisplay = "";
-
-            InputStream in = null;
-
-            //network request
-            try {
-                URL url = new URL(urlString);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                in = new BufferedInputStream(urlConnection.getInputStream());
-
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                return e.getMessage();
+            if (entity != null) {
+                instream = entity.getContent();
+                result = convertStreamToString(instream);
             }
-            return resultToDisplay;
+
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+        } finally {
+            if (instream != null) {
+                try {
+                    instream.close();
+                } catch (Exception exc) {
+
+                }
+            }
         }
+
+        return result;
+    }
+
+    public String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+            }
+        }
+
+        return sb.toString();
     }
 }

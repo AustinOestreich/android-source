@@ -38,10 +38,10 @@ public class RssItemListFragment extends Fragment implements ItemAdapter.DataSou
         return rssItemListFragment;
     }
 
-    public static interface Delegate{
-        public void onItemExpanded(RssItemListFragment rssItemListFragment, RssItem rssItem);
-        public void onItemContracted(RssItemListFragment rssItemListFragment,RssItem rssItem);
-        public void onItemVisitClicked(RssItemListFragment rssItemListFragment, RssItem rssItem);
+    public interface Delegate{
+        void onItemExpanded(RssItemListFragment rssItemListFragment, RssItem rssItem);
+        void onItemContracted(RssItemListFragment rssItemListFragment,RssItem rssItem);
+        void onItemVisitClicked(RssItemListFragment rssItemListFragment, RssItem rssItem);
     }
 
     private SwipeRefreshLayout swipeRefreshLayout;

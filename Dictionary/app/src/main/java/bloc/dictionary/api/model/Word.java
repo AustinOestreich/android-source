@@ -6,11 +6,31 @@ package bloc.dictionary.api.model;
 public class Word {
 
     private String title;
+    private String partOfSpeech;
+    private String forms;
     private String definition;
 
-    public Word(String title, String definition){
+    public Word(String title, String partOfSpeech, String forms, String definition){
         this.title = title;
+        this.partOfSpeech = partOfSpeech;
+        this.forms = forms;
         this.definition = definition;
+    }
+
+    private String getForms(){
+        return forms;
+    }
+
+    private String setForms(String forms){
+        this.forms = forms;
+    }
+
+    public String getPartOfSpeech(){
+        return partOfSpeech;
+    }
+
+    public String setPartOfSpeech(String partOfSpeech){
+        this.partOfSpeech = partOfSpeech;
     }
 
     public String getTitle(){
